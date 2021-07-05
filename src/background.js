@@ -81,7 +81,12 @@ if (isDevelopment) {
 }
 
 const si = require('systeminformation');
-const info = {};
+var info = {
+  cpu: {},
+  os: {},
+  memory: {},
+  system: {}
+};
 
 const { ipcMain } = require('electron')
 
@@ -93,21 +98,30 @@ const { ipcMain } = require('electron')
 
 
 ipcMain.on('asynchronous-message', async (event, arg) => {
-  var data = await si.osInfo();
-  info.distro = data.distro;
-  info.release = data.release;
-  info.codename = data.codename;
+  // var data = await si.osInfo();
+  // info.os = data
 
-  data = await si.system();
-  info.manufacturer = data.manufacturer;
-  info.serial = data.serial;
-  info.virtual = data.virtual;
+  // data = await si.system();
+  // info.system = data
 
-  data = await si.cpu();
-  info.cpu = data.manufacturer + ' ' + data.brand;
+  // data = await si.cpu();
+  // info.cpu = data
   
-  data = await si.mem();
-  info.total = data.total;
+  // data = await si.mem();
+  // info.memory = data
 
-  event.reply('asynchronous-reply', info)
+  const params = {
+    cpu: 'manufacturer, brand',
+    osInfo: 'platform, release, codename, distro, arch',
+    mem: 'total',
+    system: 'serial, manufacturer, virtual'
+  }
+  
+  try {
+    info = await si.get(params);
+    event.reply('asynchronous-reply', info)
+  } catch(e) {
+    console.log(e);
+  }
+
 })

@@ -1,0 +1,21 @@
+{
+    "cpfno": "128238",
+    "name": "sreenath s das",
+    "designation": "EE",
+    "location": "DELH",
+    "level": "E2",
+    "brands": [
+        { "name": "Dell", "code": "DL" },
+        { "name": "MSI", "code": "MI" },
+        { "name": "Apple", "code": "AP" }
+    ],
+    "locations": [
+        { "location": "DELH", "helpdesk": "JBB", "email": "ithelpdesk_ddu@ongc.co.in" },
+        { "location": "DELH", "helpdesk": "SMB", "email": "scopeminar_ithelpdesk@ongc.co.in" }
+    ],
+    "levels": [
+        { "id": 1, "name": "E-1 AND ABOVE LEVEL" },
+        { "id": 2, "name": "E-0 / S-LEVEL" },
+        { "id": 3, "name": "NON-EXECUTIVE OTHER THAN S LEVEL" }
+    ]
+}

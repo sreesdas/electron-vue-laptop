@@ -3,17 +3,19 @@
         <div class="card" >
             <div class="card-body">
                 <h3 class="mb-4">Login to Continue</h3>
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <label for="cpfno" class="mb-1">CPF No</label>
-                        <input type="text" class="form-control" v-model="user.cpfno" autofocus>
+                <form action="" @submit.prevent="getUser(user)">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="cpfno" class="mb-1">CPF No</label>
+                            <input type="text" class="form-control" v-model="user.cpfno" autofocus required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="password" class="mb-1">Domain Password</label>
+                            <input type="password" class="form-control" v-model="user.password" required>
+                        </div>
                     </div>
-                    <div class="col-12 mb-3">
-                        <label for="password" class="mb-1">Domain Password</label>
-                        <input type="password" class="form-control" v-model="user.password">
-                    </div>
-                </div>
-                <button class="btn btn-outline-danger" @click="login(user)">Submit</button>            
+                    <button class="btn btn-outline-danger">Submit</button>  
+                </form>          
             </div>
         </div>
     </div>
@@ -22,12 +24,20 @@
 <script>
 
 import { mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
     data: () => ({
         user: { cpfno: null, password: null }
     }),
     methods: {
+        getUser() {
+            axios.get('/data/user.json')
+            .then(res => {
+                this.login(res.data)
+            })
+            .catch(err => alert(err))
+        },
         ...mapActions(['login'])
     }
 };

@@ -7,7 +7,13 @@ export default new Vuex.Store({
   state: {
     user: {
       cpfno: null,
-      password: null
+      password: null,
+      name: null,
+      designation: null,
+      location: null,
+      level: null,
+      locations: [],
+      brands: [] 
     }
   },
   mutations: {
