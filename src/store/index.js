@@ -6,14 +6,15 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: {
-      cpfno: null,
-      password: null,
+      cpfNo: null,
+      domainPassword: null,
       name: null,
       designation: null,
       location: null,
-      level: null,
+      mobile: null,
       locations: [],
-      brands: [] 
+      brands: [],
+      levels: []
     }
   },
   mutations: {

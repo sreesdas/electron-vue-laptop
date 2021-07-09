@@ -7,12 +7,12 @@
         <li class="nav-item">
           <router-link class="nav-link active" to="/home">Home</router-link>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link class="nav-link" to="/about">Documentation</router-link>
         </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/feedback">Register Issues</router-link>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>

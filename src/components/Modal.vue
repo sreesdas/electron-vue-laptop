@@ -7,14 +7,17 @@
                     <div class="row">
                         <div class="col-12 mb-3">
                             <label for="cpfno" class="mb-1">CPF No</label>
-                            <input type="text" class="form-control" v-model="user.cpfno" autofocus required>
+                            <input type="text" class="form-control" v-model="user.cpfNo" autofocus required>
                         </div>
                         <div class="col-12 mb-3">
                             <label for="password" class="mb-1">Domain Password</label>
-                            <input type="password" class="form-control" v-model="user.password" required>
+                            <input type="password" class="form-control" v-model="user.domainPassword" required>
                         </div>
                     </div>
-                    <button class="btn btn-outline-danger">Submit</button>  
+                    <button class="btn btn-danger mb-4" @click="getUser()">
+                        <span class="spinner-border spinner-border-sm" role="status" v-if="isLoading"></span>
+                        <span class="ml-2">Login</span>
+                    </button>
                 </form>          
             </div>
         </div>
@@ -28,15 +31,24 @@ import axios from 'axios';
 
 export default {
     data: () => ({
-        user: { cpfno: null, password: null }
+        isLoading: false,
+        user: { cpfNo: null, domainPassword: null }
     }),
     methods: {
         getUser() {
-            axios.get('/data/user.json')
-            .then(res => {
-                this.login(res.data)
-            })
-            .catch(err => alert(err))
+            if(this.user.cpfNo && this.user.domainPassword) {
+                this.isLoading = true;
+                axios.post('http://10.205.47.192:8080/api/LaptopFms/Authentication', this.user)
+                .then(res => {
+                    let user = res.data.EmpInfo[0];
+                    user.brands = res.data.Brands;
+                    user.locations = res.data.Locations;
+                    user.levels = res.data.Levels;
+                    this.login(user)
+                })
+                .catch(err => alert(err.response.data))
+                .finally(() =>  { this.isLoading = false })
+            }
         },
         ...mapActions(['login'])
     }
@@ -50,7 +62,7 @@ export default {
         top:0;
         left: 0;
         width: 100vw;
-        height: 100vh;
+        height: 100%;
         background: rgba(0,0,0,0.5);
     }
 
