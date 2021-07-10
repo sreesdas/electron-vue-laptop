@@ -14,7 +14,7 @@
                             <input type="password" class="form-control" v-model="user.domainPassword" required>
                         </div>
                     </div>
-                    <button class="btn btn-danger mb-4" @click="getUser()">
+                    <button class="btn btn-danger mb-4">
                         <span class="spinner-border spinner-border-sm" role="status" v-if="isLoading"></span>
                         <span class="ml-2">Login</span>
                     </button>

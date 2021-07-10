@@ -1,8 +1,8 @@
 <template>
     <div class="absolute-container d-flex justify-content-center align-items-center">
         <div class="text-center">
-            <h4 class="text-white">Loading your system info ...</h4>
-            <p class="text-white">Please be patient. This might take a while</p>
+            <h4 class="text-white">Loading your system info...</h4>
+            <p class="text-white">This might take a while</p>
         </div>
     </div>
 </template>

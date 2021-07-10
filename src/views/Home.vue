@@ -156,7 +156,16 @@ export default {
   },
   methods: {
     submit() {
+
+      var date = new Date(this.misc.purchase_date);
+      var today = new Date();
+      if((date - today) > 0) {
+        alert('Cannot submit on a future date!');
+        return
+      }
+
       if(this.misc.level && this.misc.sublocation && this.misc.purchase_date && this.misc.brand && this.user.cpfno && this.isLoaded ) {
+        this.sysInfo.system.serial = btoa(btoa(btoa(this.sysInfo.system.serial)))
         this.postSpec({
           "spec" : this.sysInfo,
           "user" : this.user,
@@ -174,7 +183,10 @@ export default {
         alert('Your specs have been successfully submitted!');
       })
       .catch(err => alert(err.response.data))
-      .finally(() => this.isSubmitting = false)
+      .finally(() => {
+        this.isSubmitting = false
+        this.sysInfo.system.serial = atob(atob(atob(this.sysInfo.system.serial)))
+      })
     }
   }
 }
