@@ -38,7 +38,7 @@ export default {
         getUser() {
             if(this.user.cpfNo && this.user.domainPassword) {
                 this.isLoading = true;
-                axios.post('http://10.205.47.192:8080/api/LaptopFms/Authentication', this.user)
+                axios.post('https://laptopregister.ongc.co.in/regapi/api/LaptopFms/Authentication', this.user)
                 .then(res => {
                     let user = res.data.EmpInfo[0];
                     user.brands = res.data.Brands;
@@ -46,7 +46,10 @@ export default {
                     user.levels = res.data.Levels;
                     this.login(user)
                 })
-                .catch(err => alert(err.response.data))
+                .catch(err => {
+                    if(err.response) alert(err.response.data)
+                    else alert(err)
+                })
                 .finally(() =>  { this.isLoading = false })
             }
         },

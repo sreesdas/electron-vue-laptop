@@ -15,7 +15,7 @@ export default {
     Nav
   },
   mounted() {
-    this.$router.push('/home')
+    this.$router.push('/about')
   }
 }
 

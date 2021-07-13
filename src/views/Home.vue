@@ -17,6 +17,12 @@
           <td>{{ sysInfo.cpu.manufacturer }} {{ sysInfo.cpu.brand }}</td>
         </tr>
         <tr>
+          <td>Storage</td>
+          <td>
+            {{ Math.round((sysInfo.diskLayout[0] ? sysInfo.diskLayout[0].size : 0) / (1000*1000*1000)) }} GB
+            {{ sysInfo.diskLayout[0] ? sysInfo.diskLayout[0].type : '' }}</td>
+        </tr>
+        <tr>
           <td>Model</td>
           <td>{{ sysInfo.system.model }}</td>
         </tr>
@@ -95,12 +101,35 @@
         </div>
 
       </div>
+
     </div>
+
+      <div class="my-3">
+        <div class="form-check">
+          <input class="form-check-input" id="verification" type="checkbox" v-model="misc.isVerified">
+          <label class="form-check-label" for="verification">
+            I have verified the Serial No displayed above with the original Invoice
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" id="spec" type="checkbox" v-model="misc.isSpec">
+          <label class="form-check-label" for="spec">
+            Specifications of the laptop are as per the ONGC Laptop Scheme
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" id="own" type="checkbox" v-model="misc.isOwn">
+          <label class="form-check-label" for="own">
+            I will be able to bring the laptop to office in case requested
+          </label>
+        </div>
+      </div>
+
     </div>
     
     <Loader v-else />
     
-    <button class="btn btn-danger mb-4" @click="submit()" v-if="isLoaded && user.cpfno">
+    <button class="btn btn-danger mb-4" @click="submit()" v-if="isLoaded && user.cpfno" :disabled="!isChecked">
       <span class="spinner-border spinner-border-sm" role="status" v-if="isSubmitting"></span>
       <span class="ml-2">Submit</span>
     </button>
@@ -126,6 +155,7 @@ export default {
       cpu: {},
       mem: {},
       osInfo: {},
+      diskLayout: []
     },
     misc: {
       level: null,
@@ -136,6 +166,9 @@ export default {
       office2013: null,
       trendmicro: null,
       sapclient: null,
+      isVerified: false,
+      isSpec: false,
+      isOwn: false,
     },
     isLoaded: false,
     isSubmitting: false
@@ -145,6 +178,9 @@ export default {
     Loader
   },
   computed: {
+    isChecked: function() {
+      return this.misc.isOwn && this.misc.isVerified && this.misc.isVerified;
+    },
     ...mapState(['user'])
   },
   mounted() {
@@ -178,11 +214,14 @@ export default {
 
     postSpec(payload) {
       this.isSubmitting = true
-      axios.post('http://10.205.47.192:8080/api/laptopfms/registration', payload)
+      axios.post('https://laptopregister.ongc.co.in/regapi/api/laptopfms/registration', payload)
       .then(res => {
-        alert('Your specs have been successfully submitted!');
+        alert(res.data);
       })
-      .catch(err => alert(err.response.data))
+      .catch(err => {
+        if(err.response) alert(err.response.data)
+        else alert(err)
+      })
       .finally(() => {
         this.isSubmitting = false
         this.sysInfo.system.serial = atob(atob(atob(this.sysInfo.system.serial)))

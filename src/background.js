@@ -115,7 +115,8 @@ ipcMain.on('asynchronous-message', async (event, arg) => {
     cpu: 'manufacturer, brand',
     osInfo: 'platform, release, codename, distro, arch',
     mem: 'total',
-    system: 'serial, manufacturer, virtual, model'
+    system: 'serial, manufacturer, virtual, model',
+    diskLayout: 'type, size'
   }
   
   try {
