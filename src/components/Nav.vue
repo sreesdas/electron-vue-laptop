@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" href="#" @click="openHelpGuide()">Help Guide</a>
+          <button class="btn btn-link nav-link active" @click="openHelpGuide()">Help Guide</button>
         </li>
         <!-- <li class="nav-item">
           <router-link class="nav-link" to="/about">Documentation</router-link>

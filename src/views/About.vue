@@ -14,12 +14,12 @@
           </li>
           <li class="list-group-item">
             <p class="my-2">
-              3. Ensure that the Specifications of the purchased laptop are as per the ONGC Laptop Scheme under the Order No <a @click="openOfficeOrder()" href="#">Office Order No. DDN/Corp-ER/Estt-Policy/2021/Laptop/748978</a> dtd. 07.04.2021
+              3. Ensure that the Specifications of the purchased laptop are as per the ONGC Laptop Scheme under the Order No <button class="btn btn-sm btn-link" @click="openOfficeOrder()" href="#">Office Order No. DDN/Corp-ER/Estt-Policy/2021/Laptop/748978</button> dtd. 07.04.2021
             </p>
           </li>
           <li class="list-group-item">
             <p class="my-2">
-              4. Please go through the <a href="#" @click="openHelpGuide()">Help Guide</a> before submitting. Once submitted, the details cannot be modified.
+              4. Please go through the <button class="btn btn-outline-primary btn-sm" @click="openHelpGuide()">Help Guide</button> before submitting. Once submitted, the details cannot be modified.
             </p>
           </li>
         </ul>
