@@ -1,12 +1,15 @@
 <template>
-  <nav class="navbar navbar-expand navbar-dark nav-gradient">
+  <nav class="navbar navbar-expand navbar-dark nav-gradient shadow">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Laptop Register</a>
+    <a class="navbar-brand" href="#">
+      <img src="@/assets/ongc.png" alt="ongc" width="42px" style="margin-right: 10px">
+      Laptop Register
+    </a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-lg-0">
-        <!-- <li class="nav-item">
-          <router-link class="nav-link active" to="/home">Home</router-link>
-        </li> -->
+        <li class="nav-item">
+          <a class="nav-link active" href="#" @click="openHelpGuide()">Help Guide</a>
+        </li>
         <!-- <li class="nav-item">
           <router-link class="nav-link" to="/about">Documentation</router-link>
         </li>
@@ -20,10 +23,18 @@
 </template>
 
 <script>
+
+const shell = require("electron").shell
+
 export default {
   name: 'Nav',
   props: {
     
+  },
+  methods: {
+    openHelpGuide() {
+      shell.openExternal("https://laptopregister.ongc.co.in/regapi/api/laptopfms/helpguide")
+    }
   }
 }
 </script>

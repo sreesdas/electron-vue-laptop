@@ -28,6 +28,7 @@
 
 import { mapActions } from 'vuex';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 export default {
     data: () => ({
@@ -47,8 +48,8 @@ export default {
                     this.login(user)
                 })
                 .catch(err => {
-                    if(err.response) alert(err.response.data)
-                    else alert(err)
+                    if(err.response) swal("Oops!", err.response.data, "error");
+                    else swal("Oops!", err.toString(), 'error');
                 })
                 .finally(() =>  { this.isLoading = false })
             }

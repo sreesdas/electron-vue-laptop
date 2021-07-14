@@ -17,7 +17,7 @@
           <td>{{ sysInfo.cpu.manufacturer }} {{ sysInfo.cpu.brand }}</td>
         </tr>
         <tr>
-          <td>Storage</td>
+          <td>Harddisk</td>
           <td>
             {{ Math.round((sysInfo.diskLayout[0] ? sysInfo.diskLayout[0].size : 0) / (1000*1000*1000)) }} GB
             {{ sysInfo.diskLayout[0] ? sysInfo.diskLayout[0].type : '' }}</td>
@@ -108,17 +108,17 @@
         <div class="form-check">
           <input class="form-check-input" id="verification" type="checkbox" v-model="misc.isVerified">
           <label class="form-check-label" for="verification">
-            I have verified the Serial No displayed above with the original Invoice
+            I have verified the Serial No displayed above with Serial No. on the original Invoice
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" id="spec" type="checkbox" v-model="misc.isSpec">
+          <input class="form-check-input" id="spec" type="checkbox" v-model="misc.isCorrectSpec">
           <label class="form-check-label" for="spec">
-            Specifications of the laptop are as per the ONGC Laptop Scheme
+            I have ensured that the Specifications of the laptop are as per the ONGC Laptop Scheme 2021
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" id="own" type="checkbox" v-model="misc.isOwn">
+          <input class="form-check-input" id="own" type="checkbox" v-model="misc.canBring">
           <label class="form-check-label" for="own">
             I will be able to bring the laptop to office in case requested
           </label>
@@ -144,6 +144,7 @@ const axios = require('axios')
 
 import Modal from '@/components/Modal.vue';
 import Loader from '@/components/Loader.vue';
+import swal from 'sweetalert';
 
 import { mapState } from 'vuex';
 
@@ -167,8 +168,8 @@ export default {
       trendmicro: null,
       sapclient: null,
       isVerified: false,
-      isSpec: false,
-      isOwn: false,
+      isCorrectSpec: false,
+      canBring: false,
     },
     isLoaded: false,
     isSubmitting: false
@@ -179,7 +180,7 @@ export default {
   },
   computed: {
     isChecked: function() {
-      return this.misc.isOwn && this.misc.isVerified && this.misc.isVerified;
+      return this.misc.canBring && this.misc.isCorrectSpec && this.misc.isVerified;
     },
     ...mapState(['user'])
   },
@@ -191,24 +192,38 @@ export default {
     ipcRenderer.send('asynchronous-message')
   },
   methods: {
+
     submit() {
 
       var date = new Date(this.misc.purchase_date);
       var today = new Date();
       if((date - today) > 0) {
-        alert('Cannot submit on a future date!');
+        swal("Oops!", "Cannot submit on a future date", "warning");
         return
       }
 
       if(this.misc.level && this.misc.sublocation && this.misc.purchase_date && this.misc.brand && this.user.cpfno && this.isLoaded ) {
-        this.sysInfo.system.serial = btoa(btoa(btoa(this.sysInfo.system.serial)))
-        this.postSpec({
-          "spec" : this.sysInfo,
-          "user" : this.user,
-          "misc" : this.misc
-        });
+        
+        swal({
+          title: "Are you sure to proceed?",
+          text: "Once submitted, the details cannot be modified!",
+          icon: "info",
+          buttons: ['CANCEL', "OK"],
+        }).then(res => {
+          if(res) {
+            this.sysInfo.system.serial = btoa(btoa(btoa(this.sysInfo.system.serial)))
+            this.postSpec({
+              "spec" : this.sysInfo,
+              "user" : this.user,
+              "misc" : this.misc
+            });
+          }
+        })
+        .catch(err => swal("Oops!", err, "error"));
+        
+
       } else {
-        alert('Incomplete data. Did you miss any fields?');
+        swal("Oops!", "Incomplete data. Did you miss any fields?", "warning");
       }
     },
 
@@ -216,11 +231,11 @@ export default {
       this.isSubmitting = true
       axios.post('https://laptopregister.ongc.co.in/regapi/api/laptopfms/registration', payload)
       .then(res => {
-        alert(res.data);
+        swal("Success", res.data, "success");
       })
       .catch(err => {
-        if(err.response) alert(err.response.data)
-        else alert(err)
+        if(err.response) swal("Oops!", err.response.data, "error");
+        else  swal("Oops!", err, "error");
       })
       .finally(() => {
         this.isSubmitting = false

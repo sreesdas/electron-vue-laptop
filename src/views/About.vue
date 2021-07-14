@@ -4,17 +4,22 @@
         <ul class="list-group">
           <li class="list-group-item">
             <p class="my-2">
-              1. This software has to be executed from <b class="text-danger"><u>YOUR NEWLY PURCHASED LAPTOP UNDER ONGC Scheme</u></b>
+              1. This software has to be executed from <b class="text-danger"><u>YOUR NEWLY PURCHASED LAPTOP UNDER ONGC Scheme 2021</u></b>
             </p>
           </li>
           <li class="list-group-item">
             <p class="my-2">
-              2. Specifications of the purchased laptop are as per the ONGC Laptop Scheme under the Order No <a target="_blank" href="#">DDN/CORP-ER/ESTT-POLICY/2021/LAPTOP/748978</a>
+              2. <b class="text-danger"><u>DO NOT</u></b> run this software on Office PC or Corporate VPN
             </p>
           </li>
           <li class="list-group-item">
             <p class="my-2">
-              3. 
+              3. Ensure that the Specifications of the purchased laptop are as per the ONGC Laptop Scheme under the Order No <a @click="openOfficeOrder()" href="#">Office Order No. DDN/Corp-ER/Estt-Policy/2021/Laptop/748978</a> dtd. 07.04.2021
+            </p>
+          </li>
+          <li class="list-group-item">
+            <p class="my-2">
+              4. Please go through the <a href="#" @click="openHelpGuide()">Help Guide</a> before submitting. Once submitted, the details cannot be modified.
             </p>
           </li>
         </ul>
@@ -29,6 +34,8 @@
 
 import { mapActions } from 'vuex';
 import axios from 'axios';
+
+const shell = require("electron").shell
 
 export default {
   name: 'About',
@@ -47,6 +54,12 @@ export default {
   methods: {
     goHome() {
       this.$router.push('/home');
+    },
+    openHelpGuide() {
+      shell.openExternal("https://laptopregister.ongc.co.in/regapi/api/laptopfms/helpguide")
+    },
+    openOfficeOrder() {
+      shell.openExternal("https://laptopregister.ongc.co.in/regapi/api/laptopfms/order")
     }
   }
 }
