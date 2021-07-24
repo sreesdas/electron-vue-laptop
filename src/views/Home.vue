@@ -55,36 +55,30 @@
             <label for="brand" class="mb-1 text-muted">Laptop Brand</label>
             <select class="form-control" v-model="misc.brand" required>
               <option value="">-- Select Brand --</option>
-              <option :value="brand.Brand_Name" v-for="brand in user.brands" :key="brand.code"> {{ brand.Brand_Name }}</option>
+              <option :value="brand.code" v-for="brand in user.brands" :key="brand.code"> {{ brand.name }}</option>
             </select>
           </div>
           <div class="col-12 mb-3">
             <label for="sublocation" class="mb-1 text-muted">Sub Location</label>
             <select class="form-control" v-model="misc.sublocation" required>
               <option value="">-- Select Sub Location --</option>
-              <option :value="location.Email_Id" v-for="location in user.locations" :key="location.helpdesk"> {{ location.Email_Id }}</option>
+              <option :value="location.sublocation" v-for="location in user.locations" :key="location.email"> {{ location.email }}</option>
             </select>
           </div>
           <div class="col-12 mb-3">
             <label for="level" class="mb-1 text-muted">Level</label>
             <select class="form-control" v-model="misc.level" required>
               <option value="">-- Select Level --</option>
-              <option :value="level.Level" v-for="level in user.levels" :key="level.id"> {{ level.Level }}</option>
+              <option :value="level" v-for="level in user.levels" :key="level"> {{ level }}</option>
             </select>
           </div>
         </div>
 
         <p class="text-muted">Request Additional Softwares</p>
         <div class="form-check">
-          <input class="form-check-input" id="office2010" type="checkbox" v-model="misc.office2010">
-          <label class="form-check-label" for="office2010">
-            Microsoft Office 2010 for Windows
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" id="office2013" type="checkbox" v-model="misc.office2013">
-          <label class="form-check-label" for="office2013">
-            Microsoft Office 2013 for Windows
+          <input class="form-check-input" id="office" type="checkbox" v-model="misc.office">
+          <label class="form-check-label" for="office">
+            Microsoft Office for Windows
           </label>
         </div>
         <div class="form-check">
@@ -117,19 +111,13 @@
             I have ensured that the Specifications of the laptop are as per the ONGC Laptop Scheme 2021
           </label>
         </div>
-        <div class="form-check">
-          <input class="form-check-input" id="own" type="checkbox" v-model="misc.canBring">
-          <label class="form-check-label" for="own">
-            I will be able to bring the laptop to office in case requested
-          </label>
-        </div>
       </div>
 
     </div>
     
     <Loader v-else />
     
-    <button class="btn btn-danger mb-4" @click="submit()" v-if="isLoaded && user.cpfno" :disabled="!isChecked">
+    <button class="btn btn-danger mb-4" @click="submit()" v-if="isLoaded && user.cpfno" :disabled="!isChecked && !isSubmitting">
       <span class="spinner-border spinner-border-sm" role="status" v-if="isSubmitting"></span>
       <span class="ml-2">Submit</span>
     </button>
@@ -163,13 +151,11 @@ export default {
       sublocation: null,
       purchase_date: null,
       brand: null,
-      office2010: null,
-      office2013: null,
+      office: null,
       trendmicro: null,
       sapclient: null,
       isVerified: false,
       isCorrectSpec: false,
-      canBring: false,
     },
     isLoaded: false,
     isSubmitting: false
@@ -180,7 +166,7 @@ export default {
   },
   computed: {
     isChecked: function() {
-      return this.misc.canBring && this.misc.isCorrectSpec && this.misc.isVerified;
+      return this.misc.isCorrectSpec && this.misc.isVerified;
     },
     ...mapState(['user'])
   },
@@ -211,11 +197,11 @@ export default {
           buttons: ['CANCEL', "OK"],
         }).then(res => {
           if(res) {
-            this.sysInfo.system.serial = btoa(btoa(btoa(this.sysInfo.system.serial)))
             this.postSpec({
               "spec" : this.sysInfo,
               "user" : this.user,
-              "misc" : this.misc
+              "misc" : this.misc,
+              "version": "1.0.3",
             });
           }
         })
@@ -229,17 +215,17 @@ export default {
 
     postSpec(payload) {
       this.isSubmitting = true
-      axios.post('https://laptopregister.ongc.co.in/regapi/api/laptopfms/registration', payload)
+      axios.post('https://laptopregister.ongc.co.in/api/laptop', payload)
+      // axios.post('http://localhost:8000/api/laptop', payload)
       .then(res => {
         swal("Success", res.data, "success");
       })
       .catch(err => {
-        if(err.response) swal("Oops!", err.response.data, "error");
+        if(err.response) swal("Oops!", err.response.data.message, "error");
         else  swal("Oops!", err, "error");
       })
       .finally(() => {
         this.isSubmitting = false
-        this.sysInfo.system.serial = atob(atob(atob(this.sysInfo.system.serial)))
       })
     }
   }

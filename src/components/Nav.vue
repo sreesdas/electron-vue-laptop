@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     openHelpGuide() {
-      shell.openExternal("https://laptopregister.ongc.co.in/regapi/api/laptopfms/helpguide")
+      shell.openExternal("https://laptopregister.ongc.co.in/api/helpguide")
     }
   }
 }

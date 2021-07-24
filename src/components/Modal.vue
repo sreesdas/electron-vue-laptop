@@ -7,11 +7,11 @@
                     <div class="row">
                         <div class="col-12 mb-3">
                             <label for="cpfno" class="mb-1">CPF No</label>
-                            <input type="text" class="form-control" v-model="user.cpfNo" autofocus required>
+                            <input type="text" class="form-control" v-model="user.cpfno" autofocus required>
                         </div>
                         <div class="col-12 mb-3">
                             <label for="password" class="mb-1">Domain Password</label>
-                            <input type="password" class="form-control" v-model="user.domainPassword" required>
+                            <input type="password" class="form-control" v-model="user.password" required>
                         </div>
                     </div>
                     <button class="btn btn-danger mb-4">
@@ -33,22 +33,23 @@ import swal from 'sweetalert';
 export default {
     data: () => ({
         isLoading: false,
-        user: { cpfNo: null, domainPassword: null }
+        user: { cpfno: null, password: null, version: "1.0.3" }
     }),
     methods: {
         getUser() {
-            if(this.user.cpfNo && this.user.domainPassword) {
+            if(this.user.cpfno && this.user.password) {
                 this.isLoading = true;
-                axios.post('https://laptopregister.ongc.co.in/regapi/api/LaptopFms/Authentication', this.user)
+                axios.post('https://laptopregister.ongc.co.in/api/login', this.user)
+                // axios.post('http://localhost:8000/api/login', this.user)
                 .then(res => {
-                    let user = res.data.EmpInfo[0];
-                    user.brands = res.data.Brands;
-                    user.locations = res.data.Locations;
-                    user.levels = res.data.Levels;
+                    let user = res.data.user;
+                    user.brands = res.data.brands;
+                    user.locations = res.data.locations;
+                    user.levels = res.data.levels;
                     this.login(user)
                 })
                 .catch(err => {
-                    if(err.response) swal("Oops!", err.response.data, "error");
+                    if(err.response) swal("Oops!", err.response.data.message, "error");
                     else swal("Oops!", err.toString(), 'error');
                 })
                 .finally(() =>  { this.isLoading = false })

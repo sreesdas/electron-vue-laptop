@@ -22,6 +22,11 @@
               4. Please go through the <button class="btn btn-outline-primary btn-sm" @click="openHelpGuide()">Help Guide</button> before submitting. Once submitted, the details cannot be modified.
             </p>
           </li>
+          <li class="list-group-item">
+            <p class="my-2">
+              5. In case of any issues, kindly contact us at <span class="text-danger"><b><u>help_laptopfms@ongc.co.in</u></b></span>
+            </p>
+          </li>
         </ul>
         <button ref="agreeBtn" class="btn btn-danger mt-3" disabled @click="goHome()">
           <span v-text="'Registration will be enabled after ' + secondsLeft + 's'" v-if="secondsLeft>0"></span>
@@ -56,10 +61,10 @@ export default {
       this.$router.push('/home');
     },
     openHelpGuide() {
-      shell.openExternal("https://laptopregister.ongc.co.in/regapi/api/laptopfms/helpguide")
+      shell.openExternal("https://laptopregister.ongc.co.in/api/helpguide")
     },
     openOfficeOrder() {
-      shell.openExternal("https://laptopregister.ongc.co.in/regapi/api/laptopfms/order")
+      shell.openExternal("https://laptopregister.ongc.co.in/api/officeorder")
     }
   }
 }
